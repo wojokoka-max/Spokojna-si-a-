@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spokojna Siła — tai chi dla kobiet 50+</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Albert+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECEDE5; --card:#F4F5EF; --ink:#262A20; --ink-soft:#4A4F42;
+  --jade:#69805F; --jade-deep:#4C5E45; --jade-wash:#DFE4D6;
+  --seal:#AC3B2A; --stone:#A5A79A; --line:#CDD0C2;
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Albert Sans',sans-serif; background:var(--paper); color:var(--ink);
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:'Marcellus',serif; font-weight:400; letter-spacing:.01em}
+
+/* ── HERO ── */
+.hero{position:relative; max-width:980px; margin:0 auto; padding:64px 22px 34px; text-align:center; overflow:hidden}
+.enso{width:190px; height:190px; margin:0 auto 8px; display:block; opacity:0; animation:ensoIn 1.4s .2s ease forwards}
+@keyframes ensoIn{from{opacity:0; transform:rotate(-14deg) scale(.92)}to{opacity:1; transform:rotate(0) scale(1)}}
+.hero .eyebrow{font-size:12px; letter-spacing:.32em; text-transform:uppercase; color:var(--jade-deep); margin-bottom:12px}
+.hero h1{font-size:clamp(34px,7vw,58px); line-height:1.08; margin-bottom:14px}
+.hero p{max-width:560px; margin:0 auto; color:var(--ink-soft); font-size:16.5px}
+.hero .han{position:absolute; top:26px; right:18px; writing-mode:vertical-rl; font-size:15px; letter-spacing:.5em; color:var(--stone); user-select:none}
+
+/* ── STICKY BAR ── */
+.bar{position:sticky; top:0; z-index:40; background:rgba(236,237,229,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.bar-in{max-width:980px; margin:0 auto; padding:12px 18px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center}
+.chips{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+.chip{
+  font:inherit; font-size:14px; padding:7px 15px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--line); background:var(--card); color:var(--ink-soft); transition:.18s;
+}
+.chip:hover{border-color:var(--jade)}
+.chip.on{background:var(--jade-deep); border-color:var(--jade-deep); color:#F3F5EC}
+.lvl{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--card)}
+.lvl button{font:inherit; font-size:13.5px; padding:7px 14px; border:0; background:transparent; color:var(--ink-soft); cursor:pointer; transition:.18s}
+.lvl button.on{background:var(--seal); color:#F6EFE9}
+.sel{
+  font:inherit; font-size:14px; padding:7px 12px; border-radius:999px; border:1px solid var(--line);
+  background:var(--card); color:var(--ink-soft); cursor:pointer; max-width:190px;
+}
+.chip:focus-visible,.lvl button:focus-visible,.sel:focus-visible{outline:2px solid var(--seal); outline-offset:2px}
+
+/* ── GRID ── */
+.wrap{max-width:980px; margin:0 auto; padding:26px 18px 60px}
+.count{font-size:13px; color:var(--stone); text-align:center; margin-bottom:18px; letter-spacing:.06em}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px}
+.cardx{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px 16px 14px; cursor:pointer; transition:transform .18s, box-shadow .18s, border-color .18s;
+  display:flex; flex-direction:column; gap:8px; text-align:left; font:inherit; color:inherit;
+}
+.cardx:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(38,42,32,.10); border-color:var(--jade)}
+.cardx:focus-visible{outline:2px solid var(--seal); outline-offset:2px}
+.cardx .cat{font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--jade-deep)}
+.cardx h3{font-size:19.5px; line-height:1.2}
+.cardx .mini{margin:2px -4px 0}
+.cardx .mini svg{width:100%; height:auto; display:block}
+.tagrow{display:flex; flex-wrap:wrap; gap:5px; margin-top:auto}
+.tag{font-size:11.5px; padding:3px 9px; border-radius:999px; background:var(--jade-wash); color:var(--jade-deep)}
+.repline{font-size:13px; color:var(--ink-soft); border-top:1px dashed var(--line); padding-top:8px}
+.repline b{color:var(--seal); font-weight:600}
+
+/* ── MODAL ── */
+.ovl{position:fixed; inset:0; background:rgba(38,42,32,.45); z-index:60; display:none; align-items:flex-end; justify-content:center}
+.ovl.open{display:flex}
+.modal{
+  background:var(--paper); width:100%; max-width:640px; max-height:92vh; overflow-y:auto;
+  border-radius:20px 20px 0 0; padding:22px 22px 34px; position:relative;
+  animation:up .28s ease;
+}
+@keyframes up{from{transform:translateY(40px); opacity:.4}to{transform:none; opacity:1}}
+@media(min-width:700px){ .ovl{align-items:center} .modal{border-radius:20px} }
+.modal .cat{font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--jade-deep)}
+.modal h2{font-size:27px; margin:4px 0 4px; padding-right:44px}
+.modal .desc{color:var(--ink-soft); font-size:15.5px; margin-bottom:12px}
+.close{
+  position:absolute; top:14px; right:14px; width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); font-size:17px; cursor:pointer; color:var(--ink-soft);
+}
+.close:focus-visible{outline:2px solid var(--seal)}
+.figbox{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:8px 6px; margin-bottom:16px}
+.figbox svg{width:100%; height:auto; display:block}
+.sect{margin-bottom:15px}
+.sect h4{font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--jade-deep); margin-bottom:6px}
+.steps{list-style:none; counter-reset:s}
+.steps li{counter-increment:s; position:relative; padding:0 0 8px 34px; font-size:15px}
+.steps li::before{
+  content:counter(s); position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+  background:var(--jade-wash); color:var(--jade-deep); font-size:12.5px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+}
+.breath{background:var(--jade-wash); border-radius:var(--r); padding:11px 14px; font-size:14.5px; color:var(--jade-deep)}
+.lvlbox{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.lvlcard{border:1px solid var(--line); border-radius:var(--r); padding:11px 13px; background:var(--card)}
+.lvlcard.hot{border-color:var(--seal); box-shadow:0 0 0 1px var(--seal) inset}
+.lvlcard h5{font-size:12px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:4px; color:var(--ink-soft)}
+.lvlcard.hot h5{color:var(--seal)}
+.lvlcard p{font-size:14px}
+.contra{font-size:13.5px; color:var(--ink-soft)}
+.contra span{display:block; padding:3px 0 3px 16px; position:relative}
+.contra span::before{content:"◦"; position:absolute; left:2px; color:var(--seal)}
+.timer{display:flex; align-items:center; gap:12px; border-top:1px solid var(--line); padding-top:14px}
+.timer .t{font-family:'Marcellus',serif; font-size:30px; min-width:88px; font-variant-numeric:tabular-nums}
+.timer button{
+  font:inherit; font-size:13.5px; padding:8px 16px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--jade-deep); background:var(--jade-deep); color:#F3F5EC;
+}
+.timer button.ghost{background:transparent; color:var(--jade-deep)}
+
+/* ── SAFETY ── */
+.safe{max-width:980px; margin:0 auto; padding:10px 18px 70px}
+.safe .box{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:22px 22px 18px}
+.safe h2{font-size:23px; margin-bottom:10px}
+.safe p{font-size:14.5px; color:var(--ink-soft); margin-bottom:8px}
+footer{padding:0 18px 40px; text-align:center; font-size:12.5px; color:var(--stone)}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="han" aria-hidden="true">太極拳</span>
+  <svg class="enso" viewBox="0 0 200 200" aria-hidden="true">
+    <path d="M118 26 C 62 18, 22 62, 26 108 C 30 156, 78 184, 124 172 C 166 161, 186 118, 172 78 C 162 49, 138 33, 116 30"
+      fill="none" stroke="#4C5E45" stroke-width="10" stroke-linecap="round" opacity=".9"/>
+    <path d="M116 30 C 105 28, 96 28, 88 30" fill="none" stroke="#4C5E45" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+  </svg>
+  <div class="eyebrow">Tai chi · qigong · 50+</div>
+  <h1>Spokojna siła</h1>
+  <p>60 ćwiczeń inspirowanych tai chi — przy krześle, na schodach i przy ścianie. Cała praktyka w pionie: równowaga, postawa, siła nóg i swoboda stawów. Wolniej znaczy trudniej.</p>
+</header>
+
+<nav class="bar" aria-label="Filtry">
+  <div class="bar-in">
+    <div class="chips" id="catChips" role="group" aria-label="Kategoria"></div>
+    <select class="sel" id="partSel" aria-label="Partia ciała"></select>
+    <div class="lvl" id="lvlTgl" role="group" aria-label="Poziom"></div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<section class="safe">
+  <div class="box">
+    <h2>Zanim zaczniesz</h2>
+    <p><strong>Zasada tai chi:</strong> ruch prowadzi oddech, nie odwrotnie. Wdech nosem przy otwieraniu i unoszeniu, spokojny wydech przy zamykaniu i opuszczaniu. Nigdy nie wstrzymuj oddechu.</p>
+    <p><strong>Asekuracja:</strong> na początku każde ćwiczenie równoważne wykonuj z dłonią przy oparciu, poręczy lub ścianie. Odrywaj podparcie stopniowo — najpierw palce, potem cała dłoń.</p>
+    <p><strong>Przeciwwskazania:</strong> przy osteoporozie, endoprotezach, nadciśnieniu lub zawrotach głowy skonsultuj plan z lekarzem lub fizjoterapeutą. Ból ostry to sygnał stop; uczucie pracy mięśni — nie.</p>
+    <p><strong>Rytm tygodnia:</strong> 3–4 sesje po 20–30 minut dają więcej niż jedna godzinna. Zacznij od 6–8 ćwiczeń z różnych kategorii.</p>
+  </div>
+</section>
+
+<footer>Spokojna siła · trening ma charakter edukacyjny i nie zastępuje porady medycznej</footer>
+
+<div class="ovl" id="ovl" role="dialog" aria-modal="true">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+/* ============ SŁOWNIKI ============ */
+const CATS = { k:'Krzesło', s:'Schody', w:'Ściana' };
+const TAGS = {
+  row:'równowaga', pos:'postawa', nog:'nogi', bio:'biodra', ram:'ramiona',
+  tal:'talia', nad:'nadgarstki', szy:'szyja', kla:'klatka piersiowa',
+  pol:'pośladki', lyd:'łydki', cor:'brzuch / core', odd:'oddech'
+};
+const CONTRA = {
+  osteo:'Osteoporoza — mniejszy zakres skłonów i skrętów, bez pogłębiania na siłę.',
+  knee:'Wrażliwe kolana — zgięcie tylko do granicy komfortu.',
+  bp:'Nadciśnienie — ręce nad głową krócej, oddech płynny, bez zatrzymań.',
+  sho:'Bark — unoszenie do progu bólu, nie przez ból.',
+  neck:'Odcinek szyjny — ruch bardzo wolny, bez maksymalnych skrętów.',
+  hip:'Endoproteza biodra — bez krzyżowania nóg i głębokiej rotacji.',
+  bal:'Zaburzenia równowagi — zawsze z asekuracją dłoni.',
+  wri:'Wrażliwe nadgarstki — oprzyj się na przedramionach zamiast dłoni.'
+};
+
+/* ============ POZY — BAZY ============ */
+const SIT = { h:[62,34], n:[62,56], hp:[58,94], ra:[[70,72],[78,86]], la:[[68,74],[76,88]], rl:[[86,96],[88,130]], ll:[[84,98],[86,131]] };
+const STA = { h:[62,26], n:[62,48], hp:[62,88], ra:[[64,66],[66,84]], la:[[60,66],[58,84]], rl:[[63,110],[65,132]], ll:[[61,110],[59,132]] };
+const sp = o => Object.assign({}, SIT, o);          // wariacja siedząca
+const st = o => Object.assign({}, STA, o);          // wariacja stojąca
+const shift = (p,dx,dy=0)=>{                         // przesunięcie całej pozy
+  const m={}; for(const k in p){ const v=p[k];
+    m[k] = Array.isArray(v[0]) ? v.map(pt=>[pt[0]+dx,pt[1]+dy]) : [v[0]+dx,v[1]+dy]; }
+  return m;
+};
+
+/* ============ RENDER FIGURY ============ */
+const pt = a => a[0]+','+a[1];
+function figure(p){
+  const limb=(o,cls)=>`<path d="M${pt(p.n)} L${pt(o[0])} L${pt(o[1])}" class="lb ${cls}"/>`;
+  const leg =(o,cls)=>`<path d="M${pt(p.hp)} L${pt(o[0])} L${pt(o[1])}" class="lb ${cls}"/>`;
+  return `<g>
+    ${limb(p.la,'far')}${leg(p.ll,'far')}
+    <path d="M${pt(p.n)} L${pt(p.hp)}" class="lb"/>
+    <circle cx="${p.h[0]}" cy="${p.h[1]}" r="9" class="hd"/>
+    ${limb(p.ra,'')}${leg(p.rl,'')}
+  </g>`;
+}
+function prop(cat){
+  const c='class="pr"';
+  if(cat==='k') return `<path ${c} d="M36 94 H94 M40 94 V48 M46 94 V130 M88 94 V130"/>`;
+  if(cat==='s') return `<path ${c} d="M14 132 H88 V116 H112 V100 H136 V84 H152"/><path class="pr thin" d="M86 76 L152 44 M96 116 V72 M126 100 V57"/>`;
+  return `<path ${c} d="M122 14 V132 M14 132 H122"/><path class="pr thin" d="M122 30 l8 -7 M122 58 l8 -7 M122 86 l8 -7 M122 114 l8 -7"/>`;
+}
+function diagram(ex){
+  const ph=(p,i)=>`<g transform="translate(${i*164},0)">
+    <path class="pr thin" d="M14 132 H152" opacity="${ex.c==='k'?1:0}"/>
+    ${prop(ex.c)}${figure(p)}
+    <text x="20" y="24" class="phn">${i+1}</text></g>`;
+  return `<svg viewBox="0 0 322 150" role="img" aria-label="Schemat: ${ex.n}">
+    <style>
+      .lb{fill:none;stroke:#262A20;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+      .far{opacity:.38}
+      .hd{fill:#262A20}
+      .pr{fill:none;stroke:#A5A79A;stroke-width:3.5;stroke-linecap:round}
+      .thin{stroke-width:1.8;opacity:.8}
+      .phn{font:600 13px 'Albert Sans',sans-serif;fill:#AC3B2A}
+    </style>
+    <line x1="161" y1="14" x2="161" y2="138" stroke="#CDD0C2" stroke-width="1" stroke-dasharray="3 4"/>
+    ${ph(ex.ps[0],0)}${ph(ex.ps[1],1)}
+  </svg>`;
+}
+
+/* ============ DANE — 60 ĆWICZEŃ ============ */
+const EX = [
+
+/* ── KRZESŁO (20) ── */
+{c:'k',n:'Oddech dantian',t:['odd','cor'],
+ d:'Fundament całej praktyki: oddech dolnożebrowy z dłońmi na podbrzuszu.',
+ st:['Usiądź na przedniej połowie siedziska, stopy płasko, kręgosłup długi.','Połóż dłonie poniżej pępka — na dantian, energetycznym środku ciała.','Wdech nosem tak, by dłonie uniosły się na brzuchu; wydech dwa razy dłuższy.'],
+ br:'Wdech 3 s — wydech 6 s. Barki nieruchome.',
+ b:'6 oddechów', a:'12 oddechów · wydech 8 s',
+ ct:[], ps:[ sp({ra:[[72,74],[64,82]], la:[[70,76],[62,84]]}), sp({h:[62,32],ra:[[74,74],[68,86]], la:[[72,76],[66,88]]}) ]},
+
+{c:'k',n:'Qi Shi — otwarcie',t:['ram','odd','pos'],
+ d:'Klasyczne otwarcie formy Yang: ramiona unoszą się jak na wodzie.',
+ st:['Ręce swobodnie przy udach, nadgarstki miękkie.','Z wdechem unieś proste ramiona przodem do wysokości barków.','Z wydechem opuść, prowadząc ruch łokciami — jakbyś naciskała wodę.'],
+ br:'Wdech przy unoszeniu, wydech przy opuszczaniu.',
+ b:'6 powt. · zakres do mostka', a:'10 powt. · tempo 5 s w każdą stronę',
+ ct:['sho'], ps:[ sp({}), sp({ra:[[84,58],[102,56]], la:[[82,60],[100,58]]}) ]},
+
+{c:'k',n:'Grzywa dzikiego konia',t:['ram','tal','pos'],
+ d:'Rozdzielanie rąk po skosie — otwiera klatkę i uruchamia skręt tułowia.',
+ st:['Ułóż dłonie jakby trzymały piłkę przed mostkiem.','Rozsuń je po przekątnej: jedna wysoko w przód, druga nisko przy biodrze.','Wróć do „piłki” i powtórz na drugą stronę, lekko rotując tułów.'],
+ br:'Wydech przy rozdzielaniu, wdech przy powrocie.',
+ b:'5 powt. na stronę', a:'8 powt. · z wyraźną rotacją tułowia',
+ ct:['osteo','sho'], ps:[ sp({ra:[[80,62],[90,58]], la:[[78,74],[88,70]]}), sp({ra:[[84,50],[100,40]], la:[[70,82],[82,94]]}) ]},
+
+{c:'k',n:'Ręce jak chmury',t:['ram','tal','szy'],
+ d:'Yun Shou — płynne kręgi dłoni przed ciałem, rozluźnia barki i piersiowy odcinek kręgosłupa.',
+ st:['Jedna dłoń na wysokości oczu, druga na wysokości pępka.','Prowadź obie w poziomym łuku w bok, wzrok podąża za górną dłonią.','Płynnie zamień wysokości dłoni i wróć w drugą stronę.'],
+ br:'Oddech ciągły, ruch bez zatrzymań.',
+ b:'6 przejść', a:'12 przejść · szerszy łuk, wolniej',
+ ct:['neck'], ps:[ sp({ra:[[80,60],[92,52]], la:[[70,84],[82,90]]}), sp({ra:[[76,84],[88,92]], la:[[80,58],[94,50]]}) ]},
+
+{c:'k',n:'Odpychanie małpy',t:['ram','tal'],
+ d:'Naprzemienne pchnięcie i cofnięcie ręki — koordynacja i mobilność w skręcie.',
+ st:['Jedna dłoń pcha powoli w przód na wysokości barku.','Druga w tym czasie cofa się łukiem obok biodra, tułów lekko się obraca.','Płynna zamiana rąk, jak przeciąganie liny w zwolnionym tempie.'],
+ br:'Wydech z ręką pchającą.',
+ b:'5 powt. na stronę', a:'10 powt. · pełny skręt tułowia',
+ ct:['osteo'], ps:[ sp({ra:[[84,60],[102,58]], la:[[52,74],[42,86]]}), sp({ra:[[54,74],[44,86]], la:[[82,62],[100,60]]}) ]},
+
+{c:'k',n:'Gra na lutni',t:['nad','ram'],
+ d:'Shou Hui Pipa — dłonie ustawione jak przy strunach, pracują nadgarstki i przedramiona.',
+ st:['Wysuń obie dłonie przed siebie, jedna nieco dalej, palce ku górze.','Z wydechem przyciągnij dłonie miękko do ciała, łokcie przy żebrach.','Z wdechem wysuń ponownie, nadgarstki cały czas „żywe”.'],
+ br:'Wdech — wysunięcie, wydech — przyciągnięcie.',
+ b:'6 powt.', a:'10 powt. · z pauzą izometryczną 3 s',
+ ct:[], ps:[ sp({ra:[[84,62],[100,54]], la:[[78,68],[92,62]]}), sp({ra:[[74,66],[82,60]], la:[[70,72],[78,66]]}) ]},
+
+{c:'k',n:'Krążenia kuli qi',t:['nad'],
+ d:'Obie dłonie „obtaczają” niewidzialną kulę — profilaktyka sztywności dłoni i nadgarstków.',
+ st:['Unieś przedramiona, dłonie naprzeciw siebie w odległości ok. 20 cm.','Krąż nadgarstkami, jakby dłonie obracały kulę we wszystkich kierunkach.','Zmieniaj kierunek co kilka obrotów, palce miękkie.'],
+ br:'Oddech swobodny, nieprzerwany.',
+ b:'20 s', a:'60 s · większe kręgi, dodaj zaciskanie i otwieranie palców',
+ ct:[], ps:[ sp({ra:[[78,64],[86,50]], la:[[74,66],[82,52]]}), sp({ra:[[80,62],[92,56]], la:[[72,68],[80,60]]}) ]},
+
+{c:'k',n:'Przenoszenie kuli qi',t:['ram','cor','tal'],
+ d:'Trzymając „kulę”, przenosisz ją z boku na bok — pracuje cały gorset mięśniowy.',
+ st:['Ułóż dłonie jak na dużej piłce po prawej stronie, przy biodrze.','Przenieś kulę łukiem przez środek na lewą stronę, na wysokość barku.','Tułów podąża za rękami, ciężar ciała lekko się przelewa.'],
+ br:'Wdech przez środek, wydech przy odłożeniu.',
+ b:'5 przeniesień', a:'10 przeniesień · szerszy łuk i dłuższa faza',
+ ct:['osteo'], ps:[ sp({ra:[[82,66],[94,62]], la:[[80,78],[92,74]]}), sp({ra:[[50,62],[38,56]], la:[[48,74],[36,68]]}) ]},
+
+{c:'k',n:'Rotacje tułowia',t:['tal','pos'],
+ d:'Powolny skręt kręgosłupa z dłońmi na kolanach — mobilność bez obciążenia.',
+ st:['Dłonie oprzyj na kolanach, wydłuż kręgosłup ku górze.','Z wydechem obróć tułów w prawo, prowadź ruch od mostka, nie od szyi.','Wróć przez środek i powtórz w lewo.'],
+ br:'Wydech w skręcie, wdech w powrocie.',
+ b:'4 powt. na stronę · mały zakres', a:'8 powt. · z 3 s pauzą w skręcie',
+ ct:['osteo','neck'], ps:[ sp({ra:[[74,80],[84,94]], la:[[72,82],[82,96]]}), sp({h:[70,34], n:[68,56], ra:[[78,80],[86,94]], la:[[74,82],[84,96]]}) ]},
+
+{c:'k',n:'Marsz siedzący',t:['bio','nog'],
+ d:'Naprzemienne unoszenie kolan w rytmie oddechu — krążenie i zginacze bioder.',
+ st:['Usiądź stabilnie, dłonie luźno lub na siedzisku.','Z wdechem unieś jedno kolano tak wysoko, jak pozwala biodro.','Z wydechem odstaw stopę bezgłośnie — jak kot. Zmień nogę.'],
+ br:'Wdech — kolano w górę, wydech — w dół.',
+ b:'8 kroków', a:'20 kroków · bez podparcia rąk, wolne tempo',
+ ct:['hip'], ps:[ sp({}), sp({rl:[[82,76],[86,94]]}) ]},
+
+{c:'k',n:'Powolny wyprost nogi',t:['nog'],
+ d:'Kluczowe ćwiczenie przeciw sarkopenii — mięsień czworogłowy pracuje w pełnej kontroli.',
+ st:['Chwyć brzegi siedziska, kręgosłup długi.','Prostuj jedną nogę przez 4 sekundy, aż będzie równoległa do podłogi, stopa zadarta.','Zatrzymaj na moment i opuszczaj równie wolno.'],
+ br:'Wydech przy prostowaniu.',
+ b:'5 powt. na nogę', a:'10 powt. · pauza 5 s w wyproście',
+ ct:['knee'], ps:[ sp({ra:[[68,80],[62,94]], la:[[66,82],[60,96]]}), sp({ra:[[68,80],[62,94]], la:[[66,82],[60,96]], rl:[[88,96],[118,92]]}) ]},
+
+{c:'k',n:'Krążenia stóp',t:['lyd','row'],
+ d:'Ruchomość stawu skokowego to podstawa równowagi — i mniej opuchniętych kostek.',
+ st:['Wysuń jedną nogę lekko w przód, pięta może dotykać podłogi.','Rysuj stopą powolne koła, największe jakie potrafisz.','Po serii zmień kierunek, potem nogę.'],
+ br:'Oddech swobodny.',
+ b:'6 kół w każdą stronę', a:'12 kół · noga uniesiona nad podłogą',
+ ct:[], ps:[ sp({rl:[[94,102],[110,122]]}), sp({rl:[[94,102],[112,110]]}) ]},
+
+{c:'k',n:'Tęcza — skłon boczny',t:['tal','ram'],
+ d:'Z qigong „Malowanie tęczy”: łagodne wydłużenie boków tułowia.',
+ st:['Unieś oba ramiona łukiem nad głowę.','Z wydechem przechyl tułów w bok, jakby dłonie malowały tęczę na niebie.','Wróć przez środek i przejdź na drugą stronę.'],
+ br:'Wydech w przechyle, wdech w powrocie.',
+ b:'4 powt. na stronę · mały zakres', a:'8 powt. · dłuższe ramię tęczy',
+ ct:['osteo','bp'], ps:[ sp({ra:[[70,38],[68,20]], la:[[56,40],[52,22]]}), sp({h:[54,36], n:[56,56], ra:[[64,34],[56,18]], la:[[48,40],[38,26]]}) ]},
+
+{c:'k',n:'Podpieranie nieba',t:['pos','ram','odd'],
+ d:'Pierwszy z Ośmiu Kawałków Brokatu: całe ciało wydłuża się ku górze.',
+ st:['Spleć palce przed sobą, dłonie skierowane w górę.','Z wdechem wypchnij dłonie nad głowę, jakbyś podpierała sufit.','Poczuj wydłużenie od miednicy po nadgarstki, z wydechem opuść.'],
+ br:'Wdech przy pchnięciu w górę.',
+ b:'5 powt.', a:'8 powt. · pauza 4 s na górze, pięty mocno w podłogę',
+ ct:['sho','bp'], ps:[ sp({ra:[[72,58],[76,44]], la:[[66,58],[70,44]]}), sp({h:[62,30], ra:[[66,32],[66,12]], la:[[58,32],[58,12]]}) ]},
+
+{c:'k',n:'Spojrzenie za siebie',t:['szy'],
+ d:'Mądra sowa obraca głowę: łagodna mobilizacja szyi, ważna dla kierowców i wnuczek na rowerach.',
+ st:['Wydłuż szyję, broda lekko cofnięta — jak sznurek ciągnący czubek głowy.','Bardzo wolno obróć głowę w prawo do granicy komfortu.','Zatrzymaj na oddech, wróć przez środek, powtórz w lewo.'],
+ br:'Wydech w skręcie.',
+ b:'3 powt. na stronę', a:'6 powt. · z 5 s pauzą i spojrzeniem za bark',
+ ct:['neck'], ps:[ sp({}), sp({h:[56,34]}) ]},
+
+{c:'k',n:'Objęcie księżyca',t:['kla','pos','ram'],
+ d:'Ramiona tworzą wielki okrąg przed klatką — antidotum na garbienie się przy telefonie.',
+ st:['Unieś ramiona przed mostek i zaokrąglij, jakbyś obejmowała balon.','Rozsuń łopatki, poczuj rozciąganie między nimi — wdech w plecy.','Z wydechem otwórz ramiona szeroko w bok, mostek do przodu. Wróć do objęcia.'],
+ br:'Wdech w objęciu, wydech w otwarciu.',
+ b:'5 powt.', a:'8 powt. · pauza 5 s w każdej fazie',
+ ct:['sho'], ps:[ sp({ra:[[84,60],[96,68]], la:[[82,74],[94,68]]}), sp({ra:[[82,56],[100,48]], la:[[44,60],[28,52]]}) ]},
+
+{c:'k',n:'Wstawanie tai chi',t:['nog','pol','row'],
+ d:'Najbardziej funkcjonalne ćwiczenie na liście: wstawanie z krzesła w zwolnionym tempie, bez rąk.',
+ st:['Przesuń się na przód siedziska, stopy pod kolanami, lekki pochył tułowia.','Wstań przez 4 sekundy, siła z pięt i pośladków, ręce swobodnie w przód.','Usiądź równie wolno — kontrola w dół jest ważniejsza niż w górę.'],
+ br:'Wydech przy wstawaniu, wdech przy siadaniu.',
+ b:'5 powt. · dłonie mogą pomóc', a:'10 powt. · 6 s w dół, bez dotykania rąk',
+ ct:['knee'], ps:[ sp({h:[70,38], n:[68,58], ra:[[80,66],[92,72]], la:[[78,68],[90,74]]}), st({ra:[[74,60],[86,66]], la:[[72,62],[84,68]]}) ]},
+
+{c:'k',n:'Pchnięcie An',t:['ram','kla'],
+ d:'An — jedno z ośmiu pchnięć tai chi: powolny wyprost ramion z wyobrażonym oporem.',
+ st:['Dłonie przy mostku, palce w górę, łokcie nisko.','Pchaj przed siebie przez 5 sekund, jakbyś przesuwała ciężkie drzwi.','Cofnij dłonie miękko, łokcie „topnieją” w dół.'],
+ br:'Wydech przy pchnięciu.',
+ b:'5 powt.', a:'10 powt. · pchnięcie 8 s, dłonie napięte',
+ ct:[], ps:[ sp({ra:[[76,62],[84,60]], la:[[72,66],[80,64]]}), sp({ra:[[86,60],[104,58]], la:[[84,64],[102,62]]}) ]},
+
+{c:'k',n:'Falowanie kręgosłupa',t:['pos','cor'],
+ d:'Kręg po kręgu: z rozluźnionego skulenia do królewskiej postawy.',
+ st:['Pozwól tułowiowi łagodnie się skulić, broda do mostka, ręce ciężkie.','Odbuduj postawę od dołu: najpierw lędźwie, potem żebra, na końcu głowa.','Na szczycie poczuj się o 2 cm wyższa. Powtórz falę.'],
+ br:'Wydech w dół, wdech przy odbudowie.',
+ b:'4 fale', a:'8 fal · bardzo wolno, 10 s na odbudowę',
+ ct:['osteo'], ps:[ sp({h:[70,42], n:[66,60], ra:[[72,78],[76,92]], la:[[70,80],[74,94]]}), sp({h:[62,30]}) ]},
+
+{c:'k',n:'Zhan Zhuang za oparciem',t:['row','nog','pos'],
+ d:'„Stanie jak drzewo” — pozornie nic się nie dzieje, a nogi i uwaga pracują najciężej.',
+ st:['Stań za krzesłem, stopy na szerokość bioder, dłonie nad oparciem.','Ugnij minimalnie kolana, ramiona zaokrąglij jak przy obejmowaniu drzewa.','Stój nieruchomo, oddychaj do brzucha. Kciuki mogą dotykać oparcia.'],
+ br:'Spokojny oddech dolnożebrowy.',
+ b:'30 s · dłonie tuż nad oparciem', a:'2–3 min · niżej na nogach, bez asekuracji',
+ ct:['knee','bal'], ps:[ st({ra:[[76,58],[88,64]], la:[[74,70],[88,66]]}), st({hp:[62,92], rl:[[65,112],[67,132]], ll:[[63,112],[61,132]], ra:[[76,60],[88,66]], la:[[74,72],[88,68]]}) ]},
+
+/* ── SCHODY (20) ── */
+{c:'s',n:'Przelewanie ciężaru',t:['row','nog'],
+ d:'Esencja kroku tai chi: ciężar płynie z nogi na nogę jak woda, stopa przednia na stopniu.',
+ st:['Postaw jedną stopę na pierwszym stopniu, dłoń przy poręczy.','Przelej ciężar powoli na nogę przednią — do 70%, pięta tylnej zostaje.','Wróć ciężar na nogę tylną. Powtarzaj jak wahadło w miodzie.'],
+ br:'Wdech w tył, wydech w przód.',
+ b:'6 przelania na nogę', a:'12 · bez poręczy, tempo 5 s',
+ ct:['bal'], ps:[ st({rl:[[80,104],[94,114]], hp:[56,88], h:[56,26], n:[56,48]}), st({hp:[74,88], h:[76,26], n:[76,48], rl:[[86,104],[94,114]], ll:[[68,112],[60,132]]}) ]},
+
+{c:'s',n:'Krok kota',t:['row','nog'],
+ d:'Mao Bu: stopa ląduje na stopniu bezgłośnie, ciężar dopiero potem. Trening antyupadkowy w czystej postaci.',
+ st:['Unieś stopę i zawieś ją tuż nad stopniem — na wysokości, bez dotyku.','Połóż ją jak na papierze ryżowym: najpierw palce, potem pięta, wciąż bez ciężaru.','Dopiero teraz przelej ciężar. Cofnij i powtórz.'],
+ br:'Wdech przy unoszeniu, wydech przy „lądowaniu”.',
+ b:'5 powt. na nogę · z poręczą', a:'10 powt. · bez poręczy, zawieszenie 3 s',
+ ct:['bal'], ps:[ st({rl:[[80,96],[94,108]]}), st({rl:[[80,102],[94,114]]}) ]},
+
+{c:'s',n:'Dotknięcia stopnia',t:['row','bio'],
+ d:'Rytmiczne dotknięcia palcami stopy o krawędź stopnia — puls dla bioder i równowagi.',
+ st:['Stań przodem do schodów, postawa wysoka.','Dotknij palcami stopy krawędzi stopnia i wróć — lekko, bez ciężaru.','Utrzymuj równy, spokojny rytm zgodny z oddechem. Zmień nogę.'],
+ br:'Jeden dotyk na wydech.',
+ b:'8 dotknięć na nogę', a:'16 · wyższy stopień, ręce w pozycji kuli',
+ ct:[], ps:[ st({}), st({rl:[[80,102],[92,113]]}) ]},
+
+{c:'s',n:'Wejście z chmurami',t:['row','ram','nog'],
+ d:'Wchodzisz na stopień, a ręce płyną jak w Yun Shou — koordynacja góra–dół.',
+ st:['Rozpocznij krążenie dłoni przed sobą jak w „chmurach”.','Nie przerywając ruchu rąk, wejdź powoli na pierwszy stopień.','Zejdź tyłem z kontrolą, ręce wciąż płyną.'],
+ br:'Oddech ciągły, ruch nieprzerwany.',
+ b:'5 wejść · z pauzami', a:'10 wejść · płynnie, bez pauz, na drugi stopień',
+ ct:['bal'], ps:[ st({ra:[[78,58],[90,50]], la:[[68,82],[80,88]]}), shift(st({ra:[[74,84],[86,90]], la:[[78,56],[92,48]], rl:[[63,96],[65,116]], ll:[[61,96],[59,116]], hp:[62,74], n:[62,34], h:[62,12]}),30) ]},
+
+{c:'s',n:'Brush knee na stopień',t:['nog','ram','row'],
+ d:'Lou Xi Ao Bu: jedna ręka „omiata kolano”, druga pcha w przód, krok na stopień.',
+ st:['Jedna dłoń wykonuje łuk nad kolanem, jakby coś odsuwała.','Jednocześnie druga ręka pcha w przód, a stopa wchodzi na stopień.','Ciężar przelewa się w przód. Cofnij i zmień strony.'],
+ br:'Wydech z pchnięciem.',
+ b:'4 powt. na stronę', a:'8 powt. · niżej na nogach, dłuższa faza',
+ ct:['knee'], ps:[ st({ra:[[76,64],[84,74]], la:[[74,60],[86,56]]}), st({hp:[70,88], h:[72,26], n:[72,48], rl:[[84,102],[96,114]], ra:[[86,58],[104,56]], la:[[62,78],[68,92]]}) ]},
+
+{c:'s',n:'Złoty kogut',t:['row','bio','cor'],
+ d:'Stanie na jednej nodze z uniesionym kolanem — koronne ćwiczenie równowagi w tai chi.',
+ st:['Stań bokiem do poręczy, dłoń lekko na niej.','Unieś kolano do wysokości biodra, jednoimienną rękę wznieś ku górze.','Wydłuż się przez czubek głowy. Utrzymaj, zmień stronę.'],
+ br:'Oddech równy, wzrok w jeden punkt.',
+ b:'10 s na nogę · pełna dłoń na poręczy', a:'30 s · tylko jeden palec lub bez podparcia',
+ ct:['bal','hip'], ps:[ st({ra:[[80,54],[86,40]], rl:[[78,84],[80,100]]}), st({ra:[[80,44],[84,26]], rl:[[78,72],[80,92]]}) ]},
+
+{c:'s',n:'Wznosy na palce',t:['lyd','row'],
+ d:'Na krawędzi stopnia: łydki, stawy skokowe i bodziec dla gęstości kości.',
+ st:['Stań palcami na pierwszym stopniu, pięty poza krawędzią, dłoń na poręczy.','Unieś się na palce przez 3 sekundy, biodra nad kostkami.','Opuść pięty do poziomu stopnia — nie niżej. Powtórz.'],
+ br:'Wydech w górę.',
+ b:'8 powt. · obie dłonie na poręczy', a:'15 powt. · jedna noga, palce przy poręczy',
+ ct:[], ps:[ shift(st({}),24), shift(st({h:[62,20], n:[62,42], hp:[62,82], rl:[[63,104],[65,126]], ll:[[61,104],[59,126]]}),24) ]},
+
+{c:'s',n:'Pięty poza krawędź',t:['lyd'],
+ d:'Rozciąganie łydek i ścięgna Achillesa — sztywna łydka to krótszy krok i gorsza równowaga.',
+ st:['Palce na stopniu, pięty w powietrzu, obie dłonie na poręczy.','Opuść pięty poniżej poziomu stopnia — powoli, do uczucia rozciągania.','Zatrzymaj na kilka oddechów, unieś do neutralnej pozycji.'],
+ br:'Pogłębiaj rozciąganie z każdym wydechem.',
+ b:'3 × 15 s', a:'3 × 40 s · jedna noga na raz',
+ ct:[], ps:[ shift(st({}),24), shift(st({h:[62,30], n:[62,52], hp:[62,92], rl:[[63,114],[65,136]], ll:[[61,114],[59,136]]}),24) ]},
+
+{c:'s',n:'Powolne wejście',t:['nog','pol','row'],
+ d:'Dwa–trzy stopnie w tempie tai chi: każdy krok to osobna decyzja, nie odruch.',
+ st:['Wchodź po schodach w tempie 4 sekundy na krok, poręcz w zasięgu.','Kolano prowadzi nad stopę, siła z pięty i pośladka, nie z zamachu.','Na górze odwróć się spokojnie i zejdź przodem, równie wolno.'],
+ br:'Wydech z każdym krokiem w górę.',
+ b:'3 przejścia po 2 stopnie', a:'5 przejść po 3 stopnie · bez poręczy',
+ ct:['knee','bal'], ps:[ shift(st({}),26), shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[74,88],[86,98]], ll:[[63,94],[65,116]]}),36) ]},
+
+{c:'s',n:'Schodzenie tyłem',t:['nog','row','lyd'],
+ d:'Kontrolowane zejście tyłem wzmacnia ekscentrycznie uda — to one hamują każde zejście w życiu.',
+ st:['Stań na pierwszym stopniu twarzą do schodów, obie dłonie na poręczy.','Sięgnij jedną stopą w tył i w dół, powoli, aż palce znajdą podłogę.','Przenieś ciężar, dostaw drugą stopę. Wejdź przodem i powtórz.'],
+ br:'Wydech przy zejściu.',
+ b:'5 zejść · obie dłonie na poręczy', a:'10 zejść · jedna dłoń, tempo 6 s',
+ ct:['bal','knee'], ps:[ shift(st({}),30), shift(st({rl:[[52,108],[42,130]], hp:[60,86]}),30) ]},
+
+{c:'s',n:'Krok boczny na stopień',t:['bio','pol','row'],
+ d:'Wejście bokiem uruchamia odwodziciele — mięśnie, które stabilizują miednicę przy każdym kroku.',
+ st:['Stań bokiem do schodów, poręcz przed sobą.','Wejdź na stopień nogą bliższą schodów, ruchem w bok.','Dostaw drugą stopę z kontrolą, zejdź w tej samej osi.'],
+ br:'Wydech przy wejściu.',
+ b:'5 powt. na stronę', a:'10 powt. · bez dostawiania, powrót tą samą nogą',
+ ct:['hip','bal'], ps:[ st({rl:[[82,102],[96,114]], ra:[[76,66],[88,72]]}), shift(st({rl:[[78,96],[82,116]], ll:[[56,110],[50,132]], hp:[66,86]}),12) ]},
+
+{c:'s',n:'Kopnięcie piętą',t:['nog','row','cor'],
+ d:'Deng Jiao w wersji niskiej: powolny wyprost nogi z zadartą stopą, poręcz jako asekuracja.',
+ st:['Dłoń na poręczy, ciężar na jednej nodze, kolano drugiej w górę.','Wyprostuj nogę powoli w przód, nisko, pchając piętą, palce do siebie.','Zegnij i odstaw z kontrolą. Zmień stronę.'],
+ br:'Wydech przy wyproście.',
+ b:'4 powt. na nogę · nisko', a:'8 powt. · wyżej, pauza 3 s w wyproście',
+ ct:['bal','hip'], ps:[ st({ra:[[80,56],[90,60]], rl:[[78,84],[80,102]]}), st({ra:[[80,56],[90,60]], rl:[[80,98],[100,102]]}) ]},
+
+{c:'s',n:'Pozycja jeźdźca',t:['nog','pol'],
+ d:'Ma Bu przy poręczy: szeroki, płytki przysiad statyczny — cicha kuźnia siły nóg.',
+ st:['Stopy szerzej niż biodra, palce lekko na zewnątrz, dłonie przy poręczy.','Ugnij kolana, jakbyś siadała na wysokim koniu — biodra tylko lekko w dół.','Plecy pionowe, kolana nad stopami. Trwaj nieruchomo.'],
+ br:'Spokojny oddech do brzucha.',
+ b:'15 s · płytko, z poręczą', a:'60 s · głębiej, ręce w pozycji objęcia',
+ ct:['knee'], ps:[ st({rl:[[74,108],[80,132]], ll:[[50,108],[44,132]], hp:[62,90]}), st({rl:[[78,106],[84,132]], ll:[[46,106],[40,132]], hp:[62,98], n:[62,58], h:[62,36], ra:[[76,66],[88,72]], la:[[74,78],[88,74]]}) ]},
+
+{c:'s',n:'Łuk i strzała',t:['nog','pol','bio'],
+ d:'Gong Bu z przednią stopą na niskim stopniu: klasyczny wypad tai chi, głęboka praca nóg.',
+ st:['Postaw stopę na pierwszym stopniu, tylna noga daleko w tył, stopa płasko pod kątem.','Ugnij przednie kolano nad stopę — 70% ciężaru z przodu, tylna noga prosta.','Wróć ciężar na tylną nogę i powtórz przelewanie.'],
+ br:'Wydech w przód, wdech w tył.',
+ b:'4 powt. na stronę · płytko', a:'8 powt. · głębiej, ręce w pchnięciu An',
+ ct:['knee','hip'], ps:[ st({rl:[[82,104],[94,114]], ll:[[48,112],[38,132]], hp:[62,90]}), st({rl:[[88,102],[96,114]], ll:[[52,114],[36,132]], hp:[72,92], n:[74,52], h:[74,30], ra:[[88,60],[104,58]], la:[[86,64],[102,62]]}) ]},
+
+{c:'s',n:'Boczne przelewanie',t:['row','tal','bio'],
+ d:'Ciężar płynie na boki z rękami rozdzielającymi grzywę — biodra uczą się niezależności od tułowia.',
+ st:['Stań równolegle do schodów, stopy szeroko.','Przelej ciężar na nogę bliżej schodów, ręce rozdzielają się po skosie.','Wróć przez środek i przelej na drugą stronę, ręce zamieniają się rolami.'],
+ br:'Wydech przy przelaniu, wdech przez środek.',
+ b:'6 przelania', a:'12 · głębiej na nogach, stopa lżejszej nogi unosi się',
+ ct:[], ps:[ st({hp:[54,88], h:[54,26], n:[54,48], ra:[[66,54],[78,44]], la:[[44,78],[34,90]]}), st({hp:[72,88], h:[72,26], n:[72,48], ra:[[58,78],[48,90]], la:[[84,54],[96,44]]}) ]},
+
+{c:'s',n:'Marsz na stopniu',t:['row','nog','bio'],
+ d:'Marsz w miejscu na pierwszym stopniu: mniejsza powierzchnia, większe skupienie.',
+ st:['Wejdź na pierwszy stopień, znajdź stabilność, dłoń przy poręczy.','Maszeruj w miejscu w zwolnionym tempie, kolana do wygodnej wysokości.','Ramiona płyną swobodnie w rytmie przeciwnym do nóg.'],
+ br:'Równy rytm: krok — wydech.',
+ b:'10 kroków · z poręczą', a:'30 kroków · bez poręczy, kolana wyżej',
+ ct:['bal'], ps:[ shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[61,94],[59,116]]}),30), shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[76,62],[78,80]], ll:[[61,94],[59,116]], ra:[[52,50],[46,66]], la:[[74,50],[82,64]]}),30) ]},
+
+{c:'s',n:'Krok w tył ze stopnia',t:['nog','row'],
+ d:'Odwrócone „odpychanie małpy” nogami: precyzyjne cofanie to najsłabiej trenowany ruch po 50-tce.',
+ st:['Stań na pierwszym stopniu przodem do pokoju, dłoń na poręczy.','Cofnij jedną stopę w dół, sięgając palcami podłogi jak kot.','Przelej ciężar dopiero po pełnym kontakcie stopy. Wejdź z powrotem.'],
+ br:'Wydech przy kroku w tył.',
+ b:'5 powt. na nogę', a:'10 powt. · bez poręczy, ręka przeciwna pcha w przód',
+ ct:['bal'], ps:[ shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[61,94],[59,116]]}),30), shift(st({hp:[58,78], h:[58,16], n:[58,38], rl:[[63,98],[67,116]], ll:[[42,100],[32,124]]}),30) ]},
+
+{c:'s',n:'Bocian rozkłada skrzydła',t:['row','ram','pos'],
+ d:'Bai He Liang Chi na stopniu: jedna ręka wysoko, druga nisko, ciało otwarte i lekkie.',
+ st:['Stań na stopniu, ciężar głównie na jednej nodze, druga dotyka palcami.','Rozłóż ręce po skosie: jedna nad głowę, druga przy biodrze.','Wydłuż się między dłońmi jak rozpięta między niebem a ziemią.'],
+ br:'Wdech przy rozkładaniu skrzydeł.',
+ b:'3 × 10 s na stronę', a:'3 × 25 s · noga odciążona unosi się nad stopień',
+ ct:['bal','sho'], ps:[ shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[61,94],[59,116]]}),30), shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[74,88],[80,104]], ra:[[74,18],[80,2]], la:[[50,52],[42,64]]}),30) ]},
+
+{c:'s',n:'Przepływ góra–dół',t:['nog','odd','row'],
+ d:'Mini-sekwencja: wejście, otwarcie ramion, zejście — jedno długie zdanie ruchu.',
+ st:['Z wdechem wejdź na stopień, ramiona unoszą się przodem.','Na górze otwórz ręce szeroko — szczyt wdechu.','Z wydechem zejdź tyłem, ręce opadają jak liście. Powtórz bez pauzy.'],
+ br:'Cały cykl to jeden wdech i jeden wydech.',
+ b:'4 cykle', a:'10 cykli · na drugi stopień, tempo 10 s na cykl',
+ ct:['bal','bp'], ps:[ st({ra:[[80,56],[94,50]], la:[[78,58],[92,52]]}), shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[61,94],[59,116]], ra:[[80,26],[96,18]], la:[[44,26],[28,18]]}),30) ]},
+
+{c:'s',n:'Stanie na stopniu',t:['row','cor'],
+ d:'Finał kategorii: stanie na jednej nodze na stopniu, bez podparcia. Cel, nie punkt startu.',
+ st:['Wejdź na pierwszy stopień, znajdź punkt wzrokiem na wprost.','Przelej ciężar na jedną nogę, drugą unieś nisko, ręce w pozycji kuli.','Trwaj nieruchomo. Chwiejesz się? To nerwowy układ właśnie się uczy.'],
+ br:'Oddech spokojny, do brzucha.',
+ b:'8 s · palce przy poręczy', a:'40 s · bez podparcia, oczy w jednym punkcie',
+ ct:['bal'], ps:[ shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[61,94],[59,116]], ra:[[76,44],[86,52]]}),30), shift(st({h:[62,10], n:[62,32], hp:[62,72], rl:[[63,94],[65,116]], ll:[[74,86],[78,102]], ra:[[76,42],[88,50]], la:[[72,56],[86,52]]}),30) ]},
+
+/* ── ŚCIANA (20) ── */
+{c:'w',n:'Wu Ji przy ścianie',t:['pos'],
+ d:'Kalibracja postawy: ściana jako lustro dla pleców. Punkt zerowy całej praktyki.',
+ st:['Stań tyłem do ściany: pięty 2–3 cm od niej, pośladki, łopatki i potylica dotykają.','Zmniejsz przestrzeń w lędźwiach, wciągając lekko podbrzusze — bez dociskania na siłę.','Zapamiętaj to ustawienie ciałem i odejdź krok, zachowując je.'],
+ br:'5 spokojnych oddechów w ustawieniu.',
+ b:'3 powt. × 20 s', a:'5 powt. × 60 s · z ramionami uniesionymi do boków',
+ ct:[], ps:[ shift(st({h:[66,28], n:[64,48]}),42), shift(st({}),44) ]},
+
+{c:'w',n:'Anioły przyścienne',t:['pos','ram','kla'],
+ d:'Ślizganie ramion po ścianie w tempie tai chi — bezpośrednia praca nad okrągłymi plecami.',
+ st:['Plecy przy ścianie jak w Wu Ji, ramiona zgięte, grzbiety dłoni przy ścianie na wysokości uszu.','Z wdechem sunń ramiona w górę po ścianie, tak daleko, jak utrzymasz kontakt.','Z wydechem ściągnij łokcie w dół, jakbyś chowała je do kieszeni.'],
+ br:'Wdech w górę, wydech w dół.',
+ b:'6 powt. · mały zakres', a:'12 powt. · pełny wyprost, 6 s na fazę',
+ ct:['sho'], ps:[ shift(st({ra:[[76,50],[74,34]], la:[[48,52],[50,36]]}),40), shift(st({ra:[[74,36],[70,14]], la:[[50,38],[54,16]]}),40) ]},
+
+{c:'w',n:'Drzewo przy ścianie',t:['row','pos','nog'],
+ d:'Zhan Zhuang z plecami tuż przy ścianie: nieruchoma pozycja, która buduje nogi i spokój.',
+ st:['Stań plecami 2 cm od ściany — asekuruje, ale nie podpiera.','Ugnij lekko kolana, ramiona zaokrąglij przed klatką jak wokół pnia drzewa.','Stój bez ruchu. Jeśli tracisz równowagę — ściana jest tuż za tobą.'],
+ br:'Oddech dolnożebrowy, coraz wolniejszy.',
+ b:'45 s', a:'4 min · niżej na nogach',
+ ct:['knee'], ps:[ shift(st({ra:[[78,58],[90,64]], la:[[76,70],[90,66]]}),36), shift(st({hp:[62,92], rl:[[66,112],[68,132]], ll:[[62,112],[58,132]], ra:[[78,60],[90,66]], la:[[76,72],[90,68]]}),36) ]},
+
+{c:'w',n:'Pchanie ściany — An',t:['ram','kla','cor'],
+ d:'Pompka pionowa w tempie tai chi: siła ramion i klatki bez schodzenia do podłogi.',
+ st:['Dłonie na ścianie na wysokości barków, stopy 2–3 długości stopy od ściany.','Z wdechem zegnij łokcie przez 4 sekundy, ciało proste jak deska, pięty na podłodze.','Z wydechem odepchnij się równie wolno — to pchnięcie An.'],
+ br:'Wdech do ściany, wydech od niej.',
+ b:'6 powt. · stopy bliżej ściany', a:'14 powt. · stopy dalej, tempo 6 s na fazę',
+ ct:['sho','wri'], ps:[ st({h:[74,30], n:[72,50], hp:[62,90], ra:[[96,56],[118,60]], la:[[94,58],[116,62]]}), st({h:[88,36], n:[84,54], hp:[70,92], ra:[[102,60],[118,62]], la:[[100,62],[116,64]], rl:[[68,112],[66,132]], ll:[[64,112],[62,132]]}) ]},
+
+{c:'w',n:'Chmury przy ścianie',t:['ram','szy','tal'],
+ d:'Yun Shou twarzą do ściany: dłonie krążą tuż przy niej, co pilnuje płaszczyzny ruchu.',
+ st:['Stań na długość przedramienia od ściany, dłonie tuż przy jej powierzchni.','Prowadź ręce w pionowych kołach jak w „chmurach”, prawie muskając ścianę.','Wzrok podąża za górną dłonią, tułów lekko rotuje.'],
+ br:'Ruch ciągły, oddech płynny.',
+ b:'6 kół na stronę', a:'12 kół · większy promień, wolniej',
+ ct:['sho','neck'], ps:[ st({ra:[[92,48],[108,36]], la:[[88,80],[102,90]]}), st({ra:[[90,82],[104,92]], la:[[90,46],[106,34]]}) ]},
+
+{c:'w',n:'Ślizg w dół ściany',t:['nog','pol'],
+ d:'Przysiad izometryczny oparty o ścianę: uda pracują, kolana są chronione.',
+ st:['Oprzyj całe plecy o ścianę, stopy wysunięte w przód na szerokość bioder.','Zsuń się powoli, aż kolana zegną się do wygodnego kąta — nie głębiej niż 90°.','Trwaj, plecy przyklejone. Wróć w górę przez pięty.'],
+ br:'Oddech równy, bez wstrzymywania.',
+ b:'2 × 15 s · płytko', a:'3 × 45 s · kąt bliżej 90°, ręce w objęciu kuli',
+ ct:['knee'], ps:[ shift(st({}),38), shift(st({hp:[104,98], n:[104,58], h:[104,36], rl:[[82,100],[80,132]], ll:[[78,102],[76,132]], ra:[[112,66],[112,84]], la:[[96,66],[96,84]]}),0) ]},
+
+{c:'w',n:'Rozciąganie łydki',t:['lyd'],
+ d:'Klasyka przy ścianie w rytmie oddechu: długa łydka to dłuższy i pewniejszy krok.',
+ st:['Dłonie na ścianie, jedna noga w wykroku w przód, druga prosta daleko w tył.','Tylna pięta wciśnięta w podłogę, palce skierowane prosto na ścianę.','Pogłębiaj zgięcie przedniego kolana z każdym wydechem. Zmień nogi.'],
+ br:'Rozciąganie rośnie na wydechu.',
+ b:'2 × 20 s na nogę', a:'3 × 45 s · tylna noga dalej, potem wersja ze zgiętym kolanem',
+ ct:[], ps:[ st({h:[72,28], n:[70,48], hp:[64,88], ra:[[94,56],[116,58]], la:[[92,58],[114,60]], rl:[[76,108],[82,132]], ll:[[46,112],[34,132]]}), st({h:[76,30], n:[74,50], hp:[68,90], ra:[[96,58],[118,60]], la:[[94,60],[116,62]], rl:[[82,108],[88,132]], ll:[[46,112],[30,132]]}) ]},
+
+{c:'w',n:'Kogut przy ścianie',t:['row','bio'],
+ d:'Złoty kogut z palcami na ścianie: pełna wersja równowagi z minimalną asekuracją.',
+ st:['Stań bokiem do ściany, opuszki palców na jej powierzchni.','Unieś kolano do wysokości biodra, wydłuż się przez czubek głowy.','Stopniowo zmniejszaj nacisk palców — aż zostanie samo „wspomnienie” dotyku.'],
+ br:'Równy oddech, wzrok w punkt.',
+ b:'15 s na nogę · cała dłoń', a:'45 s · palce nad ścianą, bez dotyku',
+ ct:['bal','hip'], ps:[ st({ra:[[92,54],[114,58]], rl:[[78,80],[80,98]]}), st({ra:[[92,54],[110,58]], rl:[[80,70],[82,90]]}) ]},
+
+{c:'w',n:'Krążenia bioder',t:['bio','tal'],
+ d:'Miednica rysuje koła, dłonie na ścianie pilnują stabilnego tułowia.',
+ st:['Stań przodem do ściany, dłonie oparte na wysokości barków, stopy szeroko.','Krąż biodrami powoli, jakbyś obtaczała nimi wielką misę.','Zmień kierunek po serii. Kolana miękkie, tułów spokojny.'],
+ br:'Oddech swobodny, ciągły.',
+ b:'6 kół w każdą stronę', a:'12 kół · większy promień, jedna dłoń na ścianie',
+ ct:['hip'], ps:[ st({h:[68,28], n:[66,48], hp:[54,88], ra:[[92,56],[114,58]], la:[[90,58],[112,60]], rl:[[58,110],[60,132]], ll:[[50,110],[46,132]]}), st({h:[68,28], n:[66,48], hp:[72,88], ra:[[92,56],[114,58]], la:[[90,58],[112,60]], rl:[[74,110],[76,132]], ll:[[64,110],[58,132]]}) ]},
+
+{c:'w',n:'Deska stojąca',t:['cor','ram','pos'],
+ d:'Plank przy ścianie: cała praca core w pionie — zgodnie z zasadą „zero pozycji horyzontalnych”.',
+ st:['Przedramiona na ścianie na wysokości barków, stopy daleko od ściany.','Ustaw ciało w jednej linii od pięt po głowę, podbrzusze aktywne.','Trwaj nieruchomo — im dalej stopy, tym ciężej. Oddychaj.'],
+ br:'Oddech do dolnych żeber, równy.',
+ b:'2 × 20 s · stopy bliżej', a:'3 × 60 s · stopy daleko, na palcach',
+ ct:['sho'], ps:[ st({h:[76,32], n:[74,52], hp:[64,90], ra:[[100,54],[118,50]], la:[[98,56],[116,52]]}), st({h:[84,36], n:[82,56], hp:[70,92], ra:[[104,56],[118,50]], la:[[102,58],[116,52]], rl:[[70,112],[64,132]], ll:[[66,112],[60,132]]}) ]},
+
+{c:'w',n:'Rotacja z dłonią na ścianie',t:['tal','pos','kla'],
+ d:'Skręt kręgosłupa piersiowego z punktem odniesienia: ściana mówi prawdę o zakresie.',
+ st:['Stań bokiem, bliższa dłoń płasko na ścianie na wysokości barku.','Z wydechem obróć klatkę piersiową ku ścianie, biodra zostają na miejscu.','Wróć powoli. Po serii odwróć się drugim bokiem.'],
+ br:'Wydech w skręcie, wdech w powrocie.',
+ b:'4 powt. na stronę', a:'8 powt. · z 4 s pauzą i dalszym sięgnięciem drugiej ręki',
+ ct:['osteo'], ps:[ st({ra:[[94,54],[116,56]]}), st({h:[68,26], n:[66,48], ra:[[94,52],[116,54]], la:[[76,64],[90,60]]}) ]},
+
+{c:'w',n:'Otwarcie klatki',t:['kla','ram','pos'],
+ d:'Ramię na ścianie, ciało odwraca się od niego — głębokie rozciągnięcie mięśni piersiowych.',
+ st:['Stań bokiem, wyprostowane ramię połóż na ścianie za sobą, na wysokości barku.','Zrób mały krok w przód nogą dalszą od ściany i delikatnie odwróć tułów.','Poczuj rozciąganie w klatce i przedzie barku. Zmień stronę.'],
+ br:'Pogłębiaj otwarcie na wydechu.',
+ b:'2 × 20 s na stronę', a:'3 × 40 s · ramię wyżej na ścianie',
+ ct:['sho'], ps:[ st({ra:[[96,50],[118,48]]}), st({h:[56,26], n:[58,48], ra:[[96,48],[118,46]], la:[[46,64],[38,78]]}) ]},
+
+{c:'w',n:'Wznos nogi w bok',t:['bio','pol','row'],
+ d:'Odwodziciele biodra: mięśnie, które nie pozwalają miednicy opadać przy każdym kroku.',
+ st:['Stań bokiem do ściany, dłoń na niej, postawa wysoka.','Unieś zewnętrzną nogę w bok, prostą, palce skierowane w przód — nie w górę.','Ruch powolny, tylko do momentu, w którym miednica zostaje pozioma.'],
+ br:'Wydech przy uniesieniu.',
+ b:'6 powt. na nogę', a:'12 powt. · z 3 s pauzą, opuszki zamiast dłoni',
+ ct:['hip'], ps:[ st({ra:[[92,54],[114,58]]}), st({ra:[[92,54],[114,58]], ll:[[42,102],[28,116]]}) ]},
+
+{c:'w',n:'Wznos nogi w tył',t:['pol','pos'],
+ d:'Pośladek wielki — mięsień numer jeden dla sylwetki i dla wstawania z każdego krzesła świata.',
+ st:['Stań przodem do ściany, obie dłonie na niej, tułów pionowy.','Unieś prostą nogę w tył, ruch z pośladka — lędźwie się nie wyginają.','Zatrzymaj na moment w górze, opuść z kontrolą.'],
+ br:'Wydech przy uniesieniu.',
+ b:'6 powt. na nogę', a:'12 powt. · pauza 4 s, wolne opuszczanie',
+ ct:[], ps:[ st({h:[70,28], n:[68,48], ra:[[94,56],[116,58]], la:[[92,58],[114,60]]}), st({h:[70,28], n:[68,48], ra:[[94,56],[116,58]], la:[[92,58],[114,60]], ll:[[44,100],[30,110]]}) ]},
+
+{c:'w',n:'Wspięcia z asekuracją',t:['lyd','row'],
+ d:'Wznosy na palce z lekkim kontaktem dłoni: łydki plus balans w jednym.',
+ st:['Stań przodem do ściany, opuszki palców lekko na niej.','Unieś się na palce przez 3 sekundy, wyobrażając sznurek u czubka głowy.','Opuść pięty jeszcze wolniej. Kontakt ze ścianą coraz lżejszy.'],
+ br:'Wydech w górę, wdech w dół.',
+ b:'8 powt.', a:'15 powt. · bez dotyku ściany, pauza 3 s na palcach',
+ ct:[], ps:[ st({ra:[[92,54],[112,56]], la:[[90,56],[110,58]]}), st({h:[62,20], n:[62,42], hp:[62,82], rl:[[63,104],[65,126]], ll:[[61,104],[59,126]], ra:[[92,50],[112,52]], la:[[90,52],[110,54]]}) ]},
+
+{c:'w',n:'Odklejanie kręgosłupa',t:['pos','cor'],
+ d:'Kręg po kręgu od ściany i z powrotem: mapa własnego kręgosłupa w ruchu.',
+ st:['Stań plecami przy ścianie, kolana minimalnie ugięte.','Odklejaj się od góry: głowa, szyja, łopatki — kręg po kręgu, ręce ciężkie.','Zatrzymaj się w połowie i odbuduj kontakt od dołu, segment po segmencie.'],
+ br:'Wydech przy odklejaniu, wdech przy powrocie.',
+ b:'3 powt. · do łopatek', a:'6 powt. · głębiej, tempo 12 s na fazę',
+ ct:['osteo','bp'], ps:[ shift(st({}),42), shift(st({h:[80,44], n:[92,58], ra:[[86,74],[80,88]], la:[[84,76],[78,90]]}),24) ]},
+
+{c:'w',n:'Pchanie w wykroku',t:['nog','ram','cor'],
+ d:'Izometria totalna: Gong Bu plus pchnięcie ściany. Ściana nie ustąpi — i o to chodzi.',
+ st:['Wykrok przodem do ściany, dłonie płasko na niej na wysokości barków.','Pchaj ścianę z narastającą siłą przez 5 sekund — od nóg, przez tułów, do dłoni.','Rozluźnij stopniowo. Zmień nogę wykroczną.'],
+ br:'Wydech przez cały czas pchania.',
+ b:'4 × 5 s na stronę', a:'6 × 10 s · głębszy wykrok, pełna siła',
+ ct:['bp','sho'], ps:[ st({h:[70,28], n:[68,48], hp:[62,88], ra:[[94,56],[116,58]], la:[[92,58],[114,60]], rl:[[74,108],[80,132]], ll:[[48,112],[38,132]]}), st({h:[74,30], n:[72,50], hp:[66,90], ra:[[98,58],[118,60]], la:[[96,60],[116,62]], rl:[[80,108],[86,132]], ll:[[48,112],[34,132]]}) ]},
+
+{c:'w',n:'Nacisk głową',t:['szy'],
+ d:'Izometryczne wzmacnianie szyi: głowa naciska na ścianę, nic się nie rusza, mięśnie pracują.',
+ st:['Stań tyłem, potylica oparta o ścianę (można przez złożony ręcznik).','Naciśnij głową w tył z siłą 3 na 10, broda cały czas lekko cofnięta.','Trzymaj napięcie, potem stopniowo puść. Żadnego ruchu — tylko napięcie.'],
+ br:'Oddech płynny przez cały nacisk.',
+ b:'4 × 5 s · siła 2/10', a:'6 × 10 s · siła 5/10',
+ ct:['neck','bp'], ps:[ shift(st({}),44), shift(st({h:[65,27]}),44) ]},
+
+{c:'w',n:'Balans z zamkniętymi oczami',t:['row'],
+ d:'Bez wzroku równowagą rządzą stopy i błędnik. Ściana obok — jako siatka bezpieczeństwa.',
+ st:['Stań bokiem tuż przy ścianie, stopy jedna przed drugą, jak na linie.','Znajdź stabilność, potem zamknij oczy. Dłoń gotowa przy ścianie.','Wytrzymaj, otwórz oczy, zmień stopę prowadzącą.'],
+ br:'Spokojny oddech — to on stabilizuje.',
+ b:'8 s · stopy w małym rozkroku', a:'30 s · stopa przed stopą, ręce wzdłuż ciała',
+ ct:['bal'], ps:[ st({ra:[[92,56],[110,60]], rl:[[70,110],[74,132]], ll:[[56,110],[52,132]]}), st({rl:[[66,110],[70,132]], ll:[[58,110],[54,132]], ra:[[66,66],[68,84]]}) ]},
+
+{c:'w',n:'Brokat przy ścianie',t:['pos','odd','ram'],
+ d:'Finał: sekwencja z Ba Duan Jin na stojąco — podpieranie nieba z kontrolą postawy o ścianę.',
+ st:['Zacznij plecami przy ścianie w ustawieniu Wu Ji.','Odejdź pół kroku i wykonaj podpieranie nieba: splecione dłonie pchają w górę.','Wróć plecami do ściany i sprawdź: czy postawa przetrwała ruch? Powtórz cykl.'],
+ br:'Wdech przy pchnięciu w niebo, wydech przy powrocie.',
+ b:'4 cykle', a:'8 cykli · z wspięciem na palce na szczycie',
+ ct:['bp','sho'], ps:[ shift(st({}),42), st({h:[62,22], ra:[[66,28],[66,8]], la:[[58,28],[58,8]]}) ]}
+];
+
+/* ============ STAN + UI ============ */
+let fCat='all', fTag='all', lvl='b';
+
+const catChips = document.getElementById('catChips');
+[['all','Wszystkie'],['k','Krzesło'],['s','Schody'],['w','Ściana']].forEach(([v,l])=>{
+  const b=document.createElement('button'); b.className='chip'+(v==='all'?' on':''); b.textContent=l;
+  b.onclick=()=>{fCat=v; [...catChips.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); render();};
+  catChips.appendChild(b);
+});
+
+const partSel=document.getElementById('partSel');
+partSel.innerHTML='<option value="all">Wszystkie partie ciała</option>'+
+  Object.entries(TAGS).map(([k,v])=>`<option value="${k}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('');
+partSel.onchange=()=>{fTag=partSel.value; render();};
+
+const lvlTgl=document.getElementById('lvlTgl');
+[['b','Początkujący'],['a','Zaawansowany']].forEach(([v,l])=>{
+  const b=document.createElement('button'); b.textContent=l; if(v==='b')b.classList.add('on');
+  b.onclick=()=>{lvl=v; [...lvlTgl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); render();};
+  lvlTgl.appendChild(b);
+});
+
+function render(){
+  const list = EX.map((e,i)=>({...e,i})).filter(e=>
+    (fCat==='all'||e.c===fCat) && (fTag==='all'||e.t.includes(fTag)));
+  document.getElementById('count').textContent =
+    list.length+' z 60 ćwiczeń · poziom: '+(lvl==='b'?'początkujący':'zaawansowany');
+  document.getElementById('grid').innerHTML = list.map(e=>`
+    <button class="cardx" data-i="${e.i}" aria-haspopup="dialog">
+      <span class="cat">${CATS[e.c]}</span>
+      <h3>${e.n}</h3>
+      <div class="mini">${diagram(e)}</div>
+      <div class="tagrow">${e.t.map(t=>`<span class="tag">${TAGS[t]}</span>`).join('')}</div>
+      <div class="repline"><b>${lvl==='b'?'Start':'Poziom wyżej'}:</b> ${lvl==='b'?e.b:e.a}</div>
+    </button>`).join('');
+  document.querySelectorAll('.cardx').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
+}
+
+/* ============ MODAL + TIMER ============ */
+const ovl=document.getElementById('ovl'), modal=document.getElementById('modal');
+let tInt=null, tSec=0;
+
+function openModal(i){
+  const e=EX[i];
+  clearInterval(tInt); tSec=0;
+  modal.innerHTML=`
+    <button class="close" aria-label="Zamknij">✕</button>
+    <span class="cat">${CATS[e.c]}</span>
+    <h2>${e.n}</h2>
+    <p class="desc">${e.d}</p>
+    <div class="figbox">${diagram(e)}</div>
+    <div class="sect"><h4>Wykonanie</h4><ol class="steps">${e.st.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+    <div class="sect"><div class="breath">☯ ${e.br}</div></div>
+    <div class="sect"><h4>Dawkowanie</h4>
+      <div class="lvlbox">
+        <div class="lvlcard ${lvl==='b'?'hot':''}"><h5>Początkujący</h5><p>${e.b}</p></div>
+        <div class="lvlcard ${lvl==='a'?'hot':''}"><h5>Zaawansowany</h5><p>${e.a}</p></div>
+      </div></div>
+    ${e.ct.length?`<div class="sect"><h4>Ostrożnie przy</h4><div class="contra">${e.ct.map(k=>`<span>${CONTRA[k]}</span>`).join('')}</div></div>`:''}
+    <div class="timer">
+      <span class="t" id="tDisp">0:00</span>
+      <button id="tGo">Start</button>
+      <button class="ghost" id="tRst">Wyzeruj</button>
+    </div>`;
+  modal.querySelector('.close').onclick=closeModal;
+  const disp=modal.querySelector('#tDisp'), go=modal.querySelector('#tGo');
+  const show=()=>disp.textContent=Math.floor(tSec/60)+':'+String(tSec%60).padStart(2,'0');
+  go.onclick=()=>{
+    if(tInt){clearInterval(tInt); tInt=null; go.textContent='Start';}
+    else{tInt=setInterval(()=>{tSec++; show();},1000); go.textContent='Pauza';}
+  };
+  modal.querySelector('#tRst').onclick=()=>{clearInterval(tInt); tInt=null; tSec=0; show(); go.textContent='Start';};
+  ovl.classList.add('open'); document.body.style.overflow='hidden';
+  modal.querySelector('.close').focus();
+}
+function closeModal(){ ovl.classList.remove('open'); document.body.style.overflow=''; clearInterval(tInt); tInt=null; }
+ovl.onclick=e=>{ if(e.target===ovl) closeModal(); };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&ovl.classList.contains('open')) closeModal(); });
+
+render();
+
+</script>
+</body>
+</html>
