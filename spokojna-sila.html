@@ -108,13 +108,17 @@ h1,h2,h3,.disp{font-family:'Marcellus',serif; font-weight:400; letter-spacing:.0
 .contra{font-size:13.5px; color:var(--ink-soft)}
 .contra span{display:block; padding:3px 0 3px 16px; position:relative}
 .contra span::before{content:"◦"; position:absolute; left:2px; color:var(--seal)}
-.timer{display:flex; align-items:center; gap:12px; border-top:1px solid var(--line); padding-top:14px}
-.timer .t{font-family:'Marcellus',serif; font-size:30px; min-width:88px; font-variant-numeric:tabular-nums}
+.timer{display:flex; align-items:center; gap:9px; border-top:1px solid var(--line); padding-top:14px; flex-wrap:wrap}
+.timer .t{font-family:'Marcellus',serif; font-size:30px; min-width:86px; font-variant-numeric:tabular-nums}
+.timer .t.done{color:var(--seal); animation:gong 1s ease 3}
+@keyframes gong{0%,100%{opacity:1}50%{opacity:.25}}
 .timer button{
-  font:inherit; font-size:13.5px; padding:8px 16px; border-radius:999px; cursor:pointer;
+  font:inherit; font-size:13.5px; padding:8px 15px; border-radius:999px; cursor:pointer;
   border:1px solid var(--jade-deep); background:var(--jade-deep); color:#F3F5EC;
 }
 .timer button.ghost{background:transparent; color:var(--jade-deep)}
+.timer button.adj{padding:8px 11px; font-size:12.5px}
+.thint{width:100%; font-size:12px; color:var(--stone); margin-top:2px}
 
 /* ── SAFETY ── */
 .safe{max-width:980px; margin:0 auto; padding:10px 18px 70px}
@@ -703,13 +707,42 @@ function render(){
   document.querySelectorAll('.cardx').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
 }
 
-/* ============ MODAL + TIMER ============ */
+/* ============ MODAL + ODLICZANIE ============ */
 const ovl=document.getElementById('ovl'), modal=document.getElementById('modal');
-let tInt=null, tSec=0;
+let tInt=null, tSec=0, tSet=0, AC=null;
+
+/* czas z opisu dawki: serie, minuty, oddechy, powtórzenia (~6 s/powt.) */
+function durFor(s){
+  s=s.toLowerCase(); const side=/stron|nog/.test(s)?2:1; let m;
+  if(m=s.match(/^(\d+)\s*s\b/))                 return +m[1]*side;
+  if(m=s.match(/(\d+)\s*[×x]\s*(\d+)\s*s/))     return (+m[1]*+m[2]+(+m[1]-1)*10)*side;
+  if(m=s.match(/(\d+)\s*min/))                  return +m[1]*60;
+  if(m=s.match(/(\d+)\s*oddech/))               return +m[1]*9;
+  if(m=s.match(/^(\d+)/))                       return +m[1]*6*side;
+  return 60;
+}
+
+/* gong misy: trzy zanikające alikwoty, bez plików audio */
+function bowl(){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const t=AC.currentTime;
+    [[329.6,0,.5],[523.2,.02,.22],[784,.04,.1]].forEach(([f,d,g])=>{
+      const o=AC.createOscillator(), v=AC.createGain();
+      o.type='sine'; o.frequency.value=f;
+      v.gain.setValueAtTime(.0001,t+d);
+      v.gain.exponentialRampToValueAtTime(g,t+d+.02);
+      v.gain.exponentialRampToValueAtTime(.0001,t+d+2.6);
+      o.connect(v).connect(AC.destination); o.start(t+d); o.stop(t+d+2.8);
+    });
+  }catch(e){}
+  if(navigator.vibrate) navigator.vibrate([220,110,220]);
+}
 
 function openModal(i){
   const e=EX[i];
-  clearInterval(tInt); tSec=0;
+  clearInterval(tInt); tInt=null;
+  tSet=Math.max(15,durFor(lvl==='b'?e.b:e.a)); tSec=tSet;
   modal.innerHTML=`
     <button class="close" aria-label="Zamknij">✕</button>
     <span class="cat">${CATS[e.c]}</span>
@@ -725,18 +758,29 @@ function openModal(i){
       </div></div>
     ${e.ct.length?`<div class="sect"><h4>Ostrożnie przy</h4><div class="contra">${e.ct.map(k=>`<span>${CONTRA[k]}</span>`).join('')}</div></div>`:''}
     <div class="timer">
-      <span class="t" id="tDisp">0:00</span>
+      <span class="t" id="tDisp"></span>
       <button id="tGo">Start</button>
+      <button class="ghost adj" id="tMin">−15 s</button>
+      <button class="ghost adj" id="tPlu">+15 s</button>
       <button class="ghost" id="tRst">Wyzeruj</button>
+      <span class="thint">Czas dobrany do dawki poziomu — na końcu usłyszysz gong.</span>
     </div>`;
   modal.querySelector('.close').onclick=closeModal;
   const disp=modal.querySelector('#tDisp'), go=modal.querySelector('#tGo');
   const show=()=>disp.textContent=Math.floor(tSec/60)+':'+String(tSec%60).padStart(2,'0');
+  const stop=()=>{clearInterval(tInt); tInt=null; go.textContent='Start';};
+  const finish=()=>{stop(); disp.classList.add('done'); bowl();};
   go.onclick=()=>{
-    if(tInt){clearInterval(tInt); tInt=null; go.textContent='Start';}
-    else{tInt=setInterval(()=>{tSec++; show();},1000); go.textContent='Pauza';}
+    if(tInt){stop(); return;}
+    if(tSec<=0){tSec=tSet; disp.classList.remove('done'); show();}
+    if(AC&&AC.state==='suspended')AC.resume();
+    go.textContent='Pauza';
+    tInt=setInterval(()=>{ tSec--; show(); if(tSec<=0)finish(); },1000);
   };
-  modal.querySelector('#tRst').onclick=()=>{clearInterval(tInt); tInt=null; tSec=0; show(); go.textContent='Start';};
+  modal.querySelector('#tMin').onclick=()=>{tSet=Math.max(15,tSet-15); tSec=Math.max(0,tSec-15); disp.classList.remove('done'); show();};
+  modal.querySelector('#tPlu').onclick=()=>{tSet+=15; tSec+=15; disp.classList.remove('done'); show();};
+  modal.querySelector('#tRst').onclick=()=>{stop(); tSec=tSet; disp.classList.remove('done'); show();};
+  show();
   ovl.classList.add('open'); document.body.style.overflow='hidden';
   modal.querySelector('.close').focus();
 }
