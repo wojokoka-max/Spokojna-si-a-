@@ -2,9 +2,36 @@
 
 Webowa aplikacja treningowa oparta na tai chi i qigong, zaprojektowana dla kobiet po 50. roku życia. Cała praktyka odbywa się **w pionie** — bez żadnej pozycji horyzontalnej — z wykorzystaniem trzech domowych „przyrządów": krzesła, schodów i ściany.
 
-Aplikacja to **jeden samodzielny plik HTML** (~55 KB). Zero frameworków, zero zależności JS, zero plików graficznych i dźwiękowych. Jedyny zasób zewnętrzny to fonty Google (Marcellus + Albert Sans) — bez internetu aplikacja działa w pełni, jedynie z czcionką systemową.
+Statyczna strona bez procesu budowania: **`index.html` zawiera całą aplikację** (~57 KB). Zero frameworków, zero zależności JS, zero plików graficznych i dźwiękowych. Jedyny zasób zewnętrzny to fonty Google (Marcellus + Albert Sans) — bez internetu aplikacja działa w pełni, jedynie z czcionką systemową.
 
----
+## Struktura projektu
+
+```
+├── index.html    – cała aplikacja (HTML + CSS + JS + dane 60 ćwiczeń)
+├── favicon.svg   – ikona: enso z cynobrową pieczęcią
+├── robots.txt
+├── vercel.json   – nagłówki dla Vercel (opcjonalny)
+├── .nojekyll     – wyłącza Jekyll na GitHub Pages
+└── README.md
+```
+
+## Wdrożenie
+
+**GitHub Pages**
+1. Utwórz repozytorium i wgraj zawartość tego katalogu do gałęzi `main`.
+2. Settings → Pages → Source: *Deploy from a branch* → `main` / `/ (root)`.
+3. Strona pojawi się pod `https://<login>.github.io/<repo>/`.
+
+**Vercel**
+1. `vercel` w katalogu projektu (CLI) albo import repozytorium na vercel.com.
+2. Framework Preset: *Other*, bez komendy build, Output Directory: `./`.
+3. Gotowe — Vercel serwuje `index.html` z roota.
+
+**Netlify Drop / dowolny hosting statyczny** — wystarczy przeciągnąć katalog; nic nie wymaga kompilacji.
+
+**Lokalnie** — otwórz `index.html` w przeglądarce (dwuklik). Serwer nie jest potrzebny.
+
+> Uwaga mobilna: przeglądarki odblokowują dźwięk po pierwszej interakcji — gong licznika zabrzmi po naciśnięciu **Start**. iOS Safari nie wspiera wibracji; tam sygnałem końca jest gong i wizualny puls.
 
 ## Zawartość merytoryczna
 
@@ -22,8 +49,6 @@ Aplikacja to **jeden samodzielny plik HTML** (~55 KB). Zero frameworków, zero z
 
 Każde ćwiczenie zawiera: dwufazowy diagram, instrukcję krok po kroku, wskazówkę oddechową, dawkowanie dla obu poziomów oraz przeciwwskazania (osteoporoza, kolana, nadciśnienie, bark, szyja, endoproteza biodra, zaburzenia równowagi, nadgarstki).
 
----
-
 ## Funkcje
 
 - **Filtry:** kategoria, partia ciała (13 opcji), globalny przełącznik poziomu — wpływa na karty, szczegóły i licznik.
@@ -32,25 +57,9 @@ Każde ćwiczenie zawiera: dwufazowy diagram, instrukcję krok po kroku, wskazó
 - **Gong misy na koniec** — trzy zanikające alikwoty (329,6 / 523,2 / 784 Hz) syntezowane przez Web Audio API + wibracja (Android) + wizualny puls. Bez plików audio.
 - **Dostępność:** obsługa klawiatury, focus-visible, `aria-label` na diagramach, `prefers-reduced-motion`.
 
----
-
-## Uruchomienie
-
-**Lokalnie:** otwórz `spokojna-sila.html` w dowolnej przeglądarce (dwuklik). Żaden serwer nie jest potrzebny.
-
-**Publiczny adres:**
-- *Netlify Drop* — przeciągnij plik na app.netlify.com/drop, link gotowy w kilkanaście sekund.
-- *GitHub Pages* — umieść plik w repozytorium jako `index.html`, włącz Pages w ustawieniach.
-- *WebWave* — wymaga adaptacji embed: `<h1>` → `<p class="tool-title">`, `background: transparent` na body, zmienne CSS → twarde hexy, `min-height` w px, ewentualnie `overflow-x: clip`.
-
-**Uwaga mobilna:** przeglądarki odblokowują dźwięk dopiero po interakcji użytkownika — gong zadziała po naciśnięciu Start. iOS Safari nie wspiera wibracji; tam sygnałem jest gong i puls wizualny.
-
----
-
-## Architektura
+## Architektura `index.html`
 
 ```
-spokojna-sila.html
 ├── <style>      – design system „tusz i papier”
 ├── <header>     – hero z enso i tytułem
 ├── <nav>        – filtry (kategoria / partia / poziom)
@@ -58,11 +67,11 @@ spokojna-sila.html
 ├── <section>    – zasady bezpieczeństwa
 ├── modal        – szczegóły ćwiczenia + licznik
 └── <script>
-    ├── CATS / TAGS / CONTRA   – słowniki
+    ├── CATS / TAGS / CONTRA        – słowniki
     ├── SIT / STA / sp / st / shift – bazy póz i pomocniki
     ├── figure() / prop() / diagram() – silnik SVG
-    ├── EX[60]                 – dane ćwiczeń
-    ├── render() + filtry      – interfejs
+    ├── EX[60]                      – dane ćwiczeń
+    ├── render() + filtry           – interfejs
     └── durFor() / bowl() / openModal() – licznik i gong
 ```
 
@@ -85,8 +94,6 @@ spokojna-sila.html
 
 **Dodanie ćwiczenia:** dopisz obiekt do `EX` — karta, diagram, filtry i licznik zbudują się same.
 
----
-
 ## Design system
 
 | Token | Wartość | Rola |
@@ -98,8 +105,6 @@ spokojna-sila.html
 | `--stone` | `#A5A79A` | kamień — rekwizyty na diagramach |
 
 Typografia: **Marcellus** (nagłówki) + **Albert Sans** (tekst). Motyw przewodni: enso i estetyka malarstwa tuszem (shuǐmò).
-
----
 
 ## Zastrzeżenie
 
